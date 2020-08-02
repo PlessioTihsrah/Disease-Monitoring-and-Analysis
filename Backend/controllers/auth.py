@@ -1,13 +1,13 @@
 from flask_bcrypt import Bcrypt
 from flask_restful import Resource, reqparse
 from database.models import User
-from flask_jwt_simple import (
-    JWTManager, create_jwt
-)
+from flask_jwt_simple import JWTManager, create_jwt
 from mongoengine import ValidationError
 import datetime
 bcrypt = None
 jwt = None
+
+
 def initialise_auth(app):
     global bcrypt, jwt
     bcrypt = Bcrypt(app)
