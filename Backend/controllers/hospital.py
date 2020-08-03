@@ -20,6 +20,8 @@ class HospitalController(Resource):
         state = query_param['state']
         pincode = query_param['pincode']
         max_results = query_param['maxResults']
+        if(max_results<1):
+            max_results = 1
         if pincode is None:
             total_records = Hospital.objects(district__icontains=district, state__icontains=state).count()
             total_pages = math.ceil(total_records / max_results)
@@ -34,7 +36,7 @@ class HospitalController(Resource):
                     'message': 'Page Number exceeds Max Pages'
                 }
             else:
-                data = Hospital.objects(district__icontains=district, state__icontains=state)[(page - 1) * max_results:(page + 1) * max_results]
+                data = Hospital.objects(district__icontains=district, state__icontains=state)[(page - 1) * max_results:(page) * max_results]
                 return {
                     'success': True,
                     "page": page,
@@ -60,7 +62,7 @@ class HospitalController(Resource):
                 }
             else:
                 data = Hospital.objects(district__icontains=district, state__icontains=state, pincode__gt=pin_lower,
-                                        pincode__lt=pin_upper)[(page - 1) * max_results:(page + 1) * max_results]
+                                        pincode__lt=pin_upper)[(page - 1) * max_results:(page) * max_results]
                 return {
                     'success': True,
                     "page": page,
