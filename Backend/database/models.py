@@ -1,6 +1,6 @@
 from .db import db
-from mongoengine.fields import StringField, EmailField, DateTimeField, ListField, \
-    ReferenceField, BooleanField, FloatField, DictField, EmbeddedDocumentField, IntField
+from mongoengine.fields import StringField, EmailField, DateTimeField, ReferenceField,\
+    BooleanField, FloatField, DictField, EmbeddedDocumentListField, IntField
 from datetime import datetime
 
 
@@ -14,6 +14,8 @@ class Hospital(db.Document):
     district = StringField()
     mobile = StringField()
     emergency = StringField()
+    rating = FloatField(default=0.0)
+    rating_count = IntField(default=0)
 
     def get_obj(self):
         return {
@@ -31,8 +33,18 @@ class Hospital(db.Document):
 
 
 class Doctor(db.Document):
-    email = EmailField(required=True)
+    email = EmailField(required=True, primary_key=True)
     hospital = ReferenceField(Hospital, required=True)
+    password = StringField(required=True)
+    approved = BooleanField(default=False)
+    name = StringField(required=True)
+    def format(self):
+        return {
+            "email": str(self.email),
+            "name": self.name,
+            "hospital": str(self.hospital.id),
+            "approved": self.approved,
+        }
 
 
 class AppointmentDetail(db.EmbeddedDocument):
@@ -42,6 +54,16 @@ class AppointmentDetail(db.EmbeddedDocument):
     unpaid = FloatField(default=0.0)
     remarks = StringField()
     monitoring = DictField()
+
+    def format(self):
+        return {
+            "date": self.date.strftime("%d/%m/%Y, %H:%M:%S"),
+            "doctor": self.doctor,
+            "fees": self.fees,
+            "unpaid": self.fees,
+            "remarks": self.remarks,
+            "monitoring": self.monitoring
+        }
 
 
 class User(db.Document):
@@ -65,16 +87,48 @@ class Appointment(db.Document):
     hospital = ReferenceField(Hospital, required=True)
     patient = ReferenceField(User, required=True)
     closed = BooleanField(default=False)
-    appointments = ListField(EmbeddedDocumentField(AppointmentDetail), default=[])
+    appointments = EmbeddedDocumentListField(AppointmentDetail, default=[])
 
     def format(self):
-        return {
+        response = {
             "id": str(self.id),
             "creationDate": datetime.strftime(self.creationDate, '%d/%m/%Y %H:%M'),
             "nextAppointment": datetime.strftime(self.nextAppointment, '%d/%m/%Y %H:%M'),
             "hospital": self.hospital.get_obj(),
             "patient": self.patient.format(),
             "closed": self.closed,
-            "appointments": self.appointments
+            "visits": [appointment.format() for appointment in self.appointments],
+            "cancellable": len(self.appointments) == 0
 
+        }
+        if self.closedDate:
+            response["closedDate"] = datetime.strftime(self.closedDate, '%d/%m/%Y %H:%M')
+        return response
+
+
+class HospitalAdmin(db.Document):
+    email = EmailField(primary_key=True)
+    password = StringField(required=True)
+    hospital = ReferenceField(Hospital, required=True)
+    approved = BooleanField(default=False)
+    name = StringField(required=True)
+
+    def format(self):
+        return {
+            "email": self.email,
+            "name": self.name,
+            "hospital": str(self.hospital.id),
+            "approved": self.approved
+        }
+
+
+class SuperAdmin(db.Document):
+    email = EmailField(required=True, primary_key=True)
+    password = StringField(required=True)
+    approved = BooleanField(default=False)
+
+    def format(self):
+        return {
+            "email": self.email,
+            "approved": self.approved
         }
