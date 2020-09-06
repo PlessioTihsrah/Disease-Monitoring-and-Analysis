@@ -104,7 +104,7 @@ class ApproveDoctor(Resource):
                 return {"success": False, "message": data[1]}
             data = Doctor.objects(approved=False)
             return {"success": True, "unapproved": [
-                {"email": doctor.email, "name": doctor.name} for doctor in data]}
+                {"email": doctor.email, "name": doctor.name, "mobile": doctor.mobile} for doctor in data]}
         except Exception as e:
             print(e)
             return {"success": False, "message": "Something went wrong"}

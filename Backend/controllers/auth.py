@@ -52,11 +52,12 @@ class Signup(Resource):
             parser.add_argument("password", type=str)
             parser.add_argument("name", type=str)
             parser.add_argument("dob", type=str)
+            parser.add_argument("mobile", type=str)
             q = parser.parse_args()
-            if q.email is None or q.password is None or q.name is None or q.dob is None:
+            if q.email is None or q.password is None or q.name is None or q.dob is None or q.mobile is None:
                 return {
                     "success": False,
-                    "message": "Email, password, name or date of birth is missing"
+                    "message": "Email, password, name, mobile or date of birth is missing"
                 }
             else:
                 user_count = User.objects(email=q.email).count()
@@ -67,8 +68,11 @@ class Signup(Resource):
                     }
                 else:
                     password = generate_hash(q.password)
-                    dob = datetime.datetime.strptime(q.dob, '%d/%m/%Y')
-                    user = User(email=q.email, password=password, name=q.name, dob=dob)
+                    try:
+                        dob = datetime.datetime.strptime(q.dob, '%d/%m/%Y')
+                    except:
+                        return {"success": False, "message": "Invalid date of birth. Please keep the format of dd/mm/yyyy"}
+                    user = User(email=q.email, password=password, name=q.name, dob=dob, mobile=q.mobile)
                     user.save()
                     return {
                         "success": True,
@@ -137,13 +141,13 @@ class SignupDoctor(Resource):
             parser.add_argument("password", type=str)
             parser.add_argument("hospital", type=str)
             parser.add_argument("name", type=str)
+            parser.add_argument("mobile", type=str)
             q = parser.parse_args()
-            if q.email is None or q.password is None or q.hospital is None or q.name is None:
+            if q.email is None or q.password is None or q.hospital is None or q.name is None or q.mobile is None:
                 return {
                     "success": False,
-                    "message": "Email, password, name or hospital is missing"
+                    "message": "Email, password, name, mobile or hospital is missing"
                 }
-
             doctor_count = Doctor.objects(email=q.email).count()
             if doctor_count > 0:
                 return {
@@ -151,7 +155,7 @@ class SignupDoctor(Resource):
                     "message": "Doctor already exists"
                 }
             password = generate_hash(q.password)
-            doctor = Doctor(email=q.email, password=password, hospital=q.hospital, name=q.name)
+            doctor = Doctor(email=q.email, password=password, hospital=q.hospital, name=q.name, mobile=q.mobile)
             doctor.save()
             return {
                 "success": True,

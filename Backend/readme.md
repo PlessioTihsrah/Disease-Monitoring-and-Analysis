@@ -94,6 +94,7 @@ Response: JSON Response containing fields
     1. name: Name of user
     2. email: Email of user
     3. dob: Date of birth of user
+    4. mobile: mobile number of user in string
 
 #### Sample Request
 
@@ -109,7 +110,8 @@ Response (success):
         "user": {
             "name": "Test User",
             "email": "test@test.com",
-            "dob": "31/01/1990"
+            "dob": "31/01/1990",
+            "mobile": "9xxxxxxx"
         }
     }
 
@@ -134,6 +136,7 @@ Request Body:
 2. password: string, mandatory
 3. dob: string, format dd/mm/yyyy only. Mandatory
 4. name: string, mandatory
+5. mobile: string, mandatory
 
 Response: Same JSON Object as login
 
@@ -145,7 +148,8 @@ Body:
         "email": "test@test.com",
         "password": "test",
         "dob": "31/01/1990",
-        "name": "Test User"
+        "name": "Test User",
+        "mobile": "9xxxxxxx"
     }
 
 Response (success):
@@ -156,7 +160,8 @@ Response (success):
         "user": {
             "name": "Test User",
             "email": "test@test.com",
-            "dob": "31/01/1990"
+            "dob": "31/01/1990",
+            "mobile": "9xxxxxxx"
         }
     }
 
@@ -187,7 +192,8 @@ Response: JSON Response containing fields
     1. name: Name of doctor
     2. email: Email of doctor
     3. hospital: ID of hospital in which doctor works
-    4. approved: Boolean representing whether doctor is authorized by Hospital Admin
+    4. approved: Boolean representing whether doctor is authorized by Hospital Admin,
+    5. mobile: string, mobile number of doctor
 
 #### Sample Request
 Body:
@@ -227,6 +233,7 @@ Request Body:
 2. password: string, mandatory
 3. hospital: string, valid ID of any hospital. Mandatory
 4. name: string, mandatory
+5. mobile: string, mandatory
 
 Response: Same JSON Object as login
 
@@ -250,7 +257,8 @@ Response (success):
             "name": "Test User",
             "email": "test@test.com",
             "hospital": "5f265c5898966e300eb04824",
-            "approved": false
+            "approved": false,
+            "mobile": "9xxxxxxx"
             
         }
     }
@@ -701,7 +709,8 @@ Response:
                 "patient": {
                     "name": "Test User",
                     "email": "test@test.com",
-                    "dob": "31/08/1990"
+                    "dob": "31/08/1990",
+                    "mobile": "9xxxxxxx"
                 },
                 "closed": false,
                 "visits": [],
@@ -757,7 +766,8 @@ Response Body:
             "patient": {
                 "name": "Test User",
                 "email": "test@test.com",
-                "dob": "31/08/1990"
+                "dob": "31/08/1990",
+                "mobile": "9xxxxxxx"
             },
             "closed": false,
             "visits": [],
@@ -806,7 +816,8 @@ Response Body:
             "patient": {
                 "name": "Test User",
                 "email": "test@test.com",
-                "dob": "24/08/1999"
+                "dob": "24/08/1999",
+                "mobile": "9xxxxxxx"
             },
             "closed": false,
             "visits": [
@@ -883,7 +894,8 @@ Response Body:
             "patient": {
                 "name": "Test User",
                 "email": "test@test.com",
-                "dob": "20/08/1990"
+                "dob": "20/08/1990",
+                "mobile": "9xxxxxxx"
             },
             "closed": false,
             "visits": [
@@ -943,7 +955,8 @@ Response Body:
             "patient": {
                 "name": "Test User",
                 "email": "test@test.com",
-                "dob": "20/08/1990"
+                "dob": "20/08/1990",
+                "mobile": "9xxxxxxx"
             },
             "visits": [
                 {
@@ -977,6 +990,7 @@ Response Body: JSON Object containing following fields:
 3. unapproved: Array contains JSON object of unapproved doctors. Each item of array contains
     1. email: String showing email of unapproved doctor
     2. name: String showing name of unapproved doctor
+    3. mobile: String showing mobile of unapproved doctor
 
 #### Sample Request
 URL: /approve/doctors
@@ -986,8 +1000,8 @@ Response Body:
     {
         "success": true,
         "unapproved": [
-            { "email": test1@test.com", "name" : "Test 1" },
-            { "email": test2@test.com", "name" : "Test 2" },
+            { "email": test1@test.com", "name" : "Test 1", "mobile": "9xxxxxxx" },
+            { "email": test2@test.com", "name" : "Test 2", "mobile": "9xxxxxxx" },
         ]
     }
 
