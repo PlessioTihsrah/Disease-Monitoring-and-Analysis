@@ -38,12 +38,14 @@ class Doctor(db.Document):
     password = StringField(required=True)
     approved = BooleanField(default=False)
     name = StringField(required=True)
+    mobile = StringField(required=True)
     def format(self):
         return {
             "email": str(self.email),
             "name": self.name,
             "hospital": str(self.hospital.id),
             "approved": self.approved,
+            "mobile": self.mobile
         }
 
 
@@ -71,12 +73,14 @@ class User(db.Document):
     email = EmailField(required=True, primary_key=True)
     password = StringField(required=True)
     dob = DateTimeField(required=True)
+    mobile = StringField(required=True)
 
     def format(self):
         return {
             "name": self.name,
             "email": self.email,
             "dob": datetime.strftime(self.dob, '%d/%m/%Y'),
+            "mobile": self.mobile
         }
 
 
