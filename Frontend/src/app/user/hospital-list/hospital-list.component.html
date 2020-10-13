@@ -1,0 +1,129 @@
+<div class="">
+  <h2 class="text-center">Search</h2>
+  <div class="d-flex justify-content-center">
+    <form (submit)="onSubmit($event)">
+      <div class="row">
+        <div class="col-12 col-md-6 col-xl-3 pr-md-20">
+          <div class="form-group">
+            <label class="required" for="district">District</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="district"
+              id="district"
+              required
+              name="district"
+              [(ngModel)]="district"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3 pr-md-20">
+          <div class="form-group">
+            <label class="required w-100" for="state">State</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="state"
+              id="state"
+              required
+              name="state"
+              [(ngModel)]="state"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3 pr-20">
+          <div class="form-group">
+            <label class="required w-100" for="pincode">pincode</label>
+
+            <input
+              type="number"
+              class="form-control"
+              name="pincode"
+              id="pincode"
+              required
+              [(ngModel)]="pincode"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3 pt-5">
+          <button
+            type="submit"
+            class="btn btn-primary ml-auto mt-20"
+            [disabled]="!(state || district || pincode)"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row" *ngIf="hospitals.length > 0">
+  <div class="col-12">
+    <app-pagination
+      *ngIf="totalPages > 1"
+      [currentPage]="page"
+      [maxPage]="totalPages"
+      (clickedPage)="this.changePage($event)"
+    ></app-pagination>
+  </div>
+
+  <div
+    class="col-12 col-md-6 col-xl-4"
+    *ngFor="let hospital of hospitals; let i = index"
+  >
+    <div class="card text-center" style="min-height: 326px">
+      <h2 class="content-title">{{ hospital.name }}</h2>
+      <div>Address:-{{ hospital.address }}</div>
+      <div>State:-{{ hospital.state }}</div>
+      <div>District:-{{ hospital.district }}</div>
+      <div>Pincode:-{{ hospital.pincode }}</div>
+      <div>MobileNo:-{{ hospital.mobile }}</div>
+      <div class="mb-10">Emergency:-{{ hospital.emergency }}</div>
+      <button
+        style="
+          position: absolute;
+          bottom: 20px;
+          left: 25%;
+          right: 25%;
+          width: 50%;
+        "
+        class="btn btn-primary"
+        (click)="opened = i"
+        *ngIf="opened !== i"
+      >
+        Book-Appointment
+      </button>
+
+      <div *ngIf="opened === i">
+        <label><b>Date and time</b></label>
+        <input
+          name="date"
+          [(ngModel)]="date"
+          type="datetime-local"
+          class="form-control mb-5"
+        />
+        <div class="row">
+          <div class="col mr-5">
+            <button
+              class="btn btn-success btn-block"
+              (click)="book(hospital.id, date)"
+              [disabled]="!date"
+            >
+              Book
+            </button>
+          </div>
+          <div class="col ml-5">
+            <button
+              class="btn btn-danger btn-block"
+              (click)="opened = -1"
+              *ngIf="opened === i"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="content">
+  <h2 class="content-title text-center">Signup</h2>
+  <div class="d-flex justify-content-center">
+    <form class="form-inline w-400 mw-full" (submit)="onSubmit($event)">
+      <div class="form-group">
+        <label class="required w-100" for="email">Email</label>
+
+        <input
+          type="email"
+          class="form-control"
+          placeholder="email"
+          id="email"
+          required
+          name="email"
+          [(ngModel)]="email"
+        />
+      </div>
+      <div class="form-group">
+        <label class="required w-100" for="password">Password</label>
+
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          id="password"
+          required
+          name="password"
+          [(ngModel)]="password"
+        />
+      </div>
+      <div class="form-group">
+        <label class="required w-100" for="dob">Date of birth</label>
+
+        <input
+          type="date"
+          class="form-control"
+          name="dob"
+          id="dob"
+          required
+          [(ngModel)]="dob"
+        />
+      </div>
+      <div class="form-group">
+        <label class="required w-100" for="name">Name</label>
+
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          required
+          [(ngModel)]="name"
+        />
+      </div>
+      <div class="form-group">
+        <label class="required w-100" for="tel">Mobile no</label>
+
+        <input
+          type="number"
+          class="form-control"
+          name="mobile"
+          id="tel"
+          required
+          [(ngModel)]="mobileNo"
+        />
+      </div>
+      <div class="form-group mb-0">
+        <button
+          type="submit"
+          class="btn btn-primary ml-auto"
+          [disabled]="!email || !password || !name || !dob || mobileNo <= 0"
+        >
+          Sign up
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

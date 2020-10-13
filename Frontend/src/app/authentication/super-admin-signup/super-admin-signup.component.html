@@ -1,0 +1,42 @@
+<div class="content">
+  <h2 class="content-title text-center">Signup</h2>
+  <div class="d-flex justify-content-center">
+    <form class="form-inline w-400 mw-full" (submit)="onSubmit($event)">
+      <div class="form-group">
+        <label class="required w-100" for="email">Email</label>
+
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          required
+          [(ngModel)]="email"
+        />
+      </div>
+      <div class="form-group">
+        <label class="required w-100" for="password">Password</label>
+
+        <input
+          type="password"
+          class="form-control"
+          name="Password"
+          id="password"
+          required
+          [(ngModel)]="password"
+        />
+      </div>
+
+      <div class="form-group mb-0">
+        <button
+          type="submit"
+          class="btn btn-primary ml-auto"
+          value="login"
+          [disabled]="!email || !password"
+        >
+          signup
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
