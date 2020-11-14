@@ -3,7 +3,6 @@ from flask_jwt_simple import jwt_required, get_jwt
 from database.models import Appointment, User, Doctor, AppointmentDetail, HospitalAdmin
 from datetime import datetime
 from math import ceil
-from mongoengine import ValidationError
 
 
 class AppointmentCreate(Resource):
@@ -30,12 +29,15 @@ class AppointmentCreate(Resource):
         parser.add_argument('closed', type=bool, default=False)
         params = parser.parse_args()
         page = params.page
+        print(user.email, params.closed, user_type)
         if user_type == 'user':
-            total_appointments = Appointment.objects(patient=email, closed=params.closed).count()
-            appointments = Appointment.objects(patient=email, closed=params.closed).order_by('-nextAppointment')[(page - 1) * 10: page * 10]
+            total_appointments = Appointment.objects(patient=user.email, closed=params.closed).count()
+            appointments = Appointment.objects(patient=user.email, closed=params.closed).order_by('-nextAppointment')[(page - 1) * 10: page * 10]
+            print(appointments)
         else:
             total_appointments = Appointment.objects(hospital=user.hospital.id, closed=params.closed).count()
             appointments = Appointment.objects(hospital=user.hospital.id, closed=params.closed).order_by('-nextAppointment')[(page - 1) * 10: page * 10]
+
         return {
             "success": True,
             "totalAppointments": total_appointments,
@@ -72,7 +74,7 @@ class AppointmentCreate(Resource):
             if next_appointment <= creation_date:
                 return {"success": False, "message": "Appointment cannot be made to past"}
             appointment = Appointment(hospital=body.hospital, creationDate=creation_date,
-                                      nextAppointment=next_appointment, patient=email)
+                                      nextAppointment=next_appointment, patient=exists[0])
             appointment.save()
             return {
                 'success': True,
@@ -82,6 +84,7 @@ class AppointmentCreate(Resource):
 
 class AppointmentActions(Resource):
     def get_user(self, jwt):
+        print(jwt)
         user = jwt.get('sub', {})
         email = user.get('email', '')
         if user.get('type') == 'doctor':
@@ -187,14 +190,18 @@ class AppointmentActions(Resource):
                 "success": False,
                 "error": "Something went wrong"
             }
-
+    @jwt_required
     def delete(self, appointment_id):
+        print("Delete", appointment_id)
         try:
             user = self.get_user(get_jwt())
             if not user[0]:
                 return {"success": False, "message": user[1]}
             user_type, user = user
             appointment = self.get_appointment(appointment_id)
+            if not appointment[0]:
+                return {"success": False, "message": appointment[1]}
+            appointment = appointment[1]
             if user_type == "user":
                 if len(appointment.appointments) > 0:
                     return {"success": False, "message": "Cannot be cancelled"}
@@ -203,14 +210,14 @@ class AppointmentActions(Resource):
                 appointment.closedDate = datetime.now()
                 appointment.closed = True
                 appointment.save()
-                return {"success": True, "appointment": appointment.format()}
+                return {"success": True, "message": "Appointment Cancelled"}
             elif user_type == "hospital_admin":
                 if str(appointment.hospital.id) != str(user.hospital.id):
                     return {"success": False, "message": "Unauthorized"}
                 appointment.closedDate = datetime.now()
                 appointment.closed = True
                 appointment.save()
-                return {"success": True, "appointment": appointment.format()}
+                return {"success": True, "message": "Appointment Cancelled"}
             else:
                 return {"success": False, "message": "Unauthorized"}
         except Exception as e:

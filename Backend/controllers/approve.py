@@ -28,7 +28,7 @@ class ApproveHospitalAdmins(Resource):
                 return {"success": False, "message": data[1]}
             data = HospitalAdmin.objects(approved=False)
             return {"success": True, "unapproved": [
-                {"email": h_admin.email, "hospital": h_admin.hospital.get_obj()} for h_admin in data]}
+                {"email": h_admin.email, "name": h_admin.name, "hospital": h_admin.hospital.get_obj()} for h_admin in data]}
         except Exception as e:
             print(e)
             return {"success": False, "message": "Something went wrong"}
@@ -72,7 +72,7 @@ class ApproveHospitalAdmins(Resource):
             user.delete()
             return {
                 "success": True,
-                "message": "{} is approved".format(user.email)
+                "message": "{} is removed".format(user.email)
             }
         except DoesNotExist as e:
             return {"success": False, "message": "Invalid email"}

@@ -22,7 +22,6 @@ class Login(Resource):
                 try:
                     user = User.objects.get(email=q.email)
                     valid = check_hash(q.password, user.password)
-                    print(q.password, user.password, valid)
                     if valid:
                         return {
                             "success": True,

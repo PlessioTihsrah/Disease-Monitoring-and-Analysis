@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from database.models import Hospital
+from database.models import Hospital, Doctor
 from flask_jwt_simple import jwt_required, get_jwt
 import math
 
@@ -7,7 +7,31 @@ import math
 def format_data(data):
     return data.get_obj()
 
+class SearchHopsitalByName(Resource):
+    def get(self):
+        parser = reqparse.RequestParser();
+        parser.add_argument('name', type=str, default="");
+        query_param = parser.parse_args();
+        name = query_param['name']
 
+        if not name:
+            return {
+                "success": False, "message": "Name is required"
+            }
+        name = name.strip()
+        if not name:
+            return {
+                "success": False, "message": "Name is required"
+            }
+        hospitals = Hospital.objects(name__istartswith = name);
+        if(len(hospitals) == 0):
+            return {"success": False, "message": "No Hospital Found starting with " + name}
+        return {
+            "success": True,
+            "hospitals": [{"id": str(hospital.id),
+                "name":hospital.name + " "+ hospital.district + " " + hospital.state + " " + str(hospital.pincode)
+            } for hospital in hospitals]
+        }
 class HospitalController(Resource):
     @jwt_required
     def get(self):
@@ -17,12 +41,52 @@ class HospitalController(Resource):
         parser.add_argument('state', type=str, default="")
         parser.add_argument('pincode', type=int)
         parser.add_argument('maxResults', type=int, default=10)
+        parser.add_argument('disease', type=str, default='')
         query_param = parser.parse_args()
         page = query_param['page']
-        district = query_param['district']
-        state = query_param['state']
+        district = query_param['district'].lower()
+        state = query_param['state'].lower()
         pincode = query_param['pincode']
+        disease = query_param['disease']
         max_results = query_param['maxResults']
+        if disease:
+            doctors = Doctor.objects(skills__contains = disease)
+            if not doctors:
+                return {"success": False, "message": "No Hospital Found"}
+            hospitals = set()
+            for doctor in doctors:
+                hospital = doctor.hospital
+                if pincode:
+                    pin_upper = pincode + 12
+                    pin_lower = pincode - 12
+                    if hospital.pincode>=pin_lower and hospital.pincode<=pin_upper and \
+                        district in hospital.district.lower() and state in hospital.state.lower():
+                        hospitals.add(hospital)
+                elif district in hospital.district.lower() and state in hospital.state.lower():
+                        hospitals.add(hospital)
+            hospitals = list(hospitals)
+            total_records = len(hospitals)
+            if total_records == 0:
+                return {
+                    "success": False, "message": "No hospital found"
+                }
+            total_pages = math.ceil(total_records / max_results)
+            if page > total_pages:
+                return {
+                    'success': False,
+                    'message': 'Page Number exceeds Max Pages'
+                }
+            data = hospitals[(page - 1) * max_results:(page) * max_results]
+            return {
+                "success": True,
+                "page": page,
+                "totalPages": total_pages,
+                "totalRecords": total_records,
+                "data": list(map(format_data, data))
+
+            }
+
+
         if max_results < 1:
             max_results = 1
         if pincode is None:

@@ -1,6 +1,6 @@
 from .db import db
 from mongoengine.fields import StringField, EmailField, DateTimeField, ReferenceField,\
-    BooleanField, FloatField, DictField, EmbeddedDocumentListField, IntField
+    BooleanField, FloatField, DictField, EmbeddedDocumentListField, IntField, ListField
 from datetime import datetime
 
 
@@ -39,6 +39,7 @@ class Doctor(db.Document):
     approved = BooleanField(default=False)
     name = StringField(required=True)
     mobile = StringField(required=True)
+    skills = ListField(field=StringField(), default=[])
     def format(self):
         return {
             "email": str(self.email),
