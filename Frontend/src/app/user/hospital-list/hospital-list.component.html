@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-12 col-md-6 col-xl-3 pr-md-20">
           <div class="form-group">
-            <label class="required" for="district">District</label>
+            <label for="district">District</label>
             <input
               type="text"
               class="form-control"
@@ -17,9 +17,9 @@
             />
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3 pr-md-20">
+        <div class="col-12 col-md-6 col-xl-2 pr-md-20">
           <div class="form-group">
-            <label class="required w-100" for="state">State</label>
+            <label class="w-100" for="state">State</label>
             <input
               type="text"
               class="form-control"
@@ -31,10 +31,9 @@
             />
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3 pr-20">
+        <div class="col-12 col-md-6 col-xl-2 pr-20">
           <div class="form-group">
-            <label class="required w-100" for="pincode">pincode</label>
-
+            <label class="w-100" for="pincode">Pincode</label>
             <input
               type="number"
               class="form-control"
@@ -45,11 +44,27 @@
             />
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3 pt-5">
+        <div class="col-12 col-md-6 col-xl-3 pr-20">
+          <div class="form-group">
+            <label class="w-100" for="disease">Disease</label>
+            <select
+              name="disease"
+              class="form-control"
+              [(ngModel)]="disease"
+              id="disease"
+            >
+              <option value="">Disease (Optional)</option>
+              <option *ngFor="let disease of diseases" [value]="disease">
+                {{ disease }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-2 pt-5">
           <button
             type="submit"
             class="btn btn-primary ml-auto mt-20"
-            [disabled]="!(state || district || pincode)"
+            [disabled]="!(state || district || pincode || disease)"
           >
             Search
           </button>

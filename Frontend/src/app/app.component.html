@@ -13,13 +13,6 @@
   </div>
   <div *ngIf="login.loggedIn">
     <app-header></app-header>
-    <user-main *ngIf="login.userType === 'user'"></user-main>
-    <doctor-main *ngIf="login.userType === 'doctor'"></doctor-main>
-    <hospital-admin-main
-      *ngIf="login.userType === 'hospital_admin'"
-    ></hospital-admin-main>
-    <super-admin-main
-      *ngIf="login.userType === 'super_admin'"
-    ></super-admin-main>
+    <router-outlet></router-outlet>
   </div>
 </div>

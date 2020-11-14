@@ -1,0 +1,69 @@
+<div class="card">
+  <div class="card-title text-center">
+    <b
+      >Hospital {{ appointment.hospital.name }} <br />on
+      {{ appointment.creationDate }}</b
+    >
+  </div>
+  <div class="content">
+    <div>Appointment ID: {{ appointment.id }}</div>
+    <div>
+      Patient: {{ appointment.patient.name }}, {{ appointment.patient.mobile }}
+    </div>
+
+    <div>Next Appointment: {{ appointment.nextAppointment }}</div>
+    <div *ngIf="!appointment.closed">Unpaid: {{ getUnpaid() }}</div>
+  </div>
+  <div class="d-flex justify-content-between">
+    <div>
+      <button
+        class="btn btn-secondary"
+        (click)="show = !show"
+        [innerText]="show ? 'Hide Details' : 'Show Details'"
+      ></button>
+    </div>
+    <div>
+      <button
+        class="btn btn-danger"
+        *ngIf="
+          forceCancel ||
+          (appointment.cancellable && !appointment.closed && !hideCancel)
+        "
+        (click)="cancelAppointment(appointment.id)"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+  <div *ngIf="show">
+    <div *ngFor="let detail of appointment.visits" class="card">
+      <table class="table">
+        <tr>
+          <td>Doctor:</td>
+          <td>{{ detail.doctor }}</td>
+        </tr>
+        <tr>
+          <td>Fees:</td>
+          <td>{{ detail.fees }}</td>
+        </tr>
+        <tr>
+          <td>Unpaid:</td>
+          <td>{{ detail.unpaid }}</td>
+        </tr>
+        <tr>
+          <td>Remarks</td>
+          <td>{{ detail.remarks }}</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Monitoring</b>
+          </td>
+        </tr>
+        <tr *ngFor="let item of detail.monitoring | keyvalue">
+          <td>{{ item.key }}</td>
+          <td>{{ item.value }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

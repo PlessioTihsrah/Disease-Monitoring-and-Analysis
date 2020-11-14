@@ -10,18 +10,21 @@ import { DoctorModule } from './doctor/doctor.module';
 import { SuperAdminModule } from './super-admin/super-admin.module';
 import { HospitalAdminModule } from './hospital-admin/hospital-admin.module';
 import { HeaderComponent } from './header/header.component';
-import { NgxSpinner } from 'ngx-spinner/lib/ngx-spinner.enum';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouteHandlerModule } from './route-handler/route-handler.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     AuthenticationModule,
     FormsModule,
     HttpClientModule,
+    RouteHandlerModule,
     UserModule,
     DoctorModule,
     SuperAdminModule,

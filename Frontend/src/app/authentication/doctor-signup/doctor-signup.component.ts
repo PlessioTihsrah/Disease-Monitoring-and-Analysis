@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
+import { UxService } from '../../ux.service';
 
 @Component({
   selector: 'app-doctor-signup',
@@ -7,13 +8,15 @@ import { AuthService } from '../../auth.service';
   styleUrls: ['./doctor-signup.component.css'],
 })
 export class DoctorSignupComponent implements OnInit {
-  email: string = '';
-  password: string = '';
-  hospital: string = '';
-  name: string = '';
-  mobileNo: number = 0;
+  email = '';
+  password = '';
+  hospital = '';
+  name = '';
+  mobileNo = 0;
+  hospitalToSearch = '';
+  hospitals: { id: string; name: string }[] = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private ux: UxService) {}
   onSubmit(event) {
     event.preventDefault();
     this.authService.signupDoctor(
@@ -23,6 +26,16 @@ export class DoctorSignupComponent implements OnInit {
       this.name,
       this.mobileNo
     );
+  }
+  searchHospital(name: string) {
+    this.authService.getHospitalList(name).subscribe((res: any) => {
+      if (res.success) {
+        this.hospitals = res.hospitals;
+        this.hospital = this.hospitals[0].id;
+      } else {
+        this.ux.showToast('Error', res.message);
+      }
+    });
   }
 
   ngOnInit(): void {}

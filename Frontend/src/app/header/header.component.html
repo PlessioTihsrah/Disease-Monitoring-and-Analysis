@@ -4,6 +4,9 @@
   <a routerLink="/" class="navbar-brand"> Home </a>
   <!-- Navbar content with sign up button -->
   <div class="navbar-content">
+    <button class="btn-action btn mr-10" (click)="ux.toggleDarkMode()">
+      <fa-icon [icon]="getIcon()"></fa-icon>
+    </button>
     <button class="btn btn-primary" type="button" (click)="logout()">
       Logout
     </button>

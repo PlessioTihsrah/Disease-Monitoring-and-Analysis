@@ -1,0 +1,13 @@
+<app-pagination
+  [currentPage]="page"
+  [maxPage]="totalPages"
+  *ngIf="totalPages > 0"
+></app-pagination>
+<div class="row">
+  <div class="col-12" *ngFor="let appointment of appointments">
+    <app-appointment-card
+      [appointment]="appointment"
+      (deleted)="getData()"
+    ></app-appointment-card>
+  </div>
+</div>

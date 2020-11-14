@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'hospital-admin-main',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit {
-  constructor() {}
+  user;
+  constructor(private authService: AuthService) {
+    this.user = authService.user;
+  }
 
   ngOnInit(): void {}
 }

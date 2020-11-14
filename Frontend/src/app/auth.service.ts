@@ -5,10 +5,9 @@ import {
   DoctorAuthResponse,
 } from './types';
 
-declare var halfmoon;
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { UxService } from './ux.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +17,8 @@ export class AuthService {
   user: any;
   userType = '';
   token = '';
-
-  constructor(
-    private http: HttpClient,
-    private spinnerService: NgxSpinnerService
-  ) {
+  baseURL = 'https://realtimehospital.herokuapp.com';
+  constructor(private http: HttpClient, private ux: UxService) {
     if (localStorage.getItem('user')) {
       this.user = JSON.parse(localStorage.getItem('user'));
       this.userType = localStorage.getItem('userType');
@@ -30,20 +26,12 @@ export class AuthService {
       this.loggedIn = true;
     }
   }
-  showToast(title: string, content: string): void {
-    halfmoon.initStickyAlert({
-      content,
-      title,
-    });
-  }
+
   private setUser(user: any, type: string, token: string): void {
-    this.user = user;
-    this.loggedIn = true;
-    this.userType = type;
-    this.token = token;
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('userType', type);
     localStorage.setItem('token', token);
+    location.reload();
   }
   signupUser(
     email: string,
@@ -53,9 +41,9 @@ export class AuthService {
     mobile: number
   ): void {
     dob = dob.split('-').reverse().join('/');
-    this.spinnerService.show();
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/signup/user', {
+      .post(`${this.baseURL}/signup/user`, {
         email,
         password,
         dob,
@@ -63,13 +51,13 @@ export class AuthService {
         mobile: '' + mobile,
       })
       .subscribe((response: UserAuthResponse) => {
-        this.spinnerService.hide();
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.user, 'user', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   signupDoctor(
     email: string,
@@ -78,9 +66,9 @@ export class AuthService {
     name: string,
     mobile: number
   ): void {
-    console.log(email, password, hospital, name, mobile);
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/signup/doctor', {
+      .post(`${this.baseURL}/signup/doctor`, {
         email,
         password,
         hospital,
@@ -88,12 +76,13 @@ export class AuthService {
         mobile: '' + mobile,
       })
       .subscribe((response: DoctorAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.doctor, 'doctor', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   signupHospitalAdmin(
     email: string,
@@ -101,17 +90,18 @@ export class AuthService {
     hospital: string,
     name: string
   ): void {
-    console.log(email, password, hospital, name);
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/signup/hospital-admin', {
+      .post(`${this.baseURL}/signup/hospital-admin`, {
         email,
         password,
         hospital,
         name,
       })
       .subscribe((response: HospitalAdminAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(
             response.hospital_admin,
@@ -119,75 +109,83 @@ export class AuthService {
             response.token
           );
         }
-      });
+      }, this.ux.errHandler);
   }
   signupSuperAdmin(email: string, password: string): void {
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/signup/super-admin', {
+      .post(`${this.baseURL}/signup/super-admin`, {
         email,
         password,
       })
       .subscribe((response: SuperAdminAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.super_admin, 'super_admin', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   loginUser(email: string, password: string): void {
-    this.spinnerService.show();
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/login/user', {
+      .post(`${this.baseURL}/login/user`, {
         email,
         password,
       })
       .subscribe((response: UserAuthResponse) => {
-        this.spinnerService.hide();
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.user, 'user', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   loginDoctor(email: string, password: string): void {
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/login/doctor', {
+      .post(`${this.baseURL}/login/doctor`, {
         email,
         password,
       })
       .subscribe((response: DoctorAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.doctor, 'doctor', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   loginSuperAdmin(email: string, password: string): void {
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/login/super-admin', {
+      .post(`${this.baseURL}/login/super-admin`, {
         email,
         password,
       })
       .subscribe((response: SuperAdminAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(response.super_admin, 'super_admin', response.token);
         }
-      });
+      }, this.ux.errHandler);
   }
   loginHospitalAdmin(email: string, password: string): void {
+    this.ux.startSpinner();
     this.http
-      .post('https://realtimehospital.herokuapp.com/login/hospital-admin', {
+      .post(`${this.baseURL}/login/hospital-admin`, {
         email,
         password,
       })
       .subscribe((response: HospitalAdminAuthResponse) => {
+        this.ux.stopSpinner();
         if (!response.success) {
-          this.showToast('Error', response.message);
+          this.ux.showToast('Error', response.message);
         } else {
           this.setUser(
             response.hospital_admin,
@@ -195,7 +193,7 @@ export class AuthService {
             response.token
           );
         }
-      });
+      }, this.ux.errHandler);
   }
   logout(): void {
     this.loggedIn = false;
@@ -203,5 +201,14 @@ export class AuthService {
     localStorage.removeItem('user');
     localStorage.removeItem('userType');
     localStorage.removeItem('token');
+  }
+  getHospitalList(hospitalName: string) {
+    if (hospitalName.trim().length > 0) {
+      return this.http.get(this.baseURL + '/search', {
+        params: {
+          name: hospitalName,
+        },
+      });
+    }
   }
 }

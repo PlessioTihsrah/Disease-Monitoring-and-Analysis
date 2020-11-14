@@ -66,7 +66,8 @@ export interface AppointmentResponse {
   message: string;
   totalAppointments: number;
   page: number;
-  appointment: Appointment[];
+  totalPages: number;
+  appointments: Appointment[];
 }
 
 export interface DoctorAuthResponse {
@@ -104,4 +105,39 @@ export interface HospitalSearchResponse {
   totalPages: number;
   totalRecords: number;
   data: HospitalData[];
+}
+
+export interface DiseasePredictionResponse {
+  success: boolean;
+  message: string;
+  disease: string;
+}
+
+export interface HospitalListResponse {
+  success: boolean;
+  message: string;
+  hospitals: { id: string; name: string }[];
+}
+
+export interface ApproveDoctorsResponse {
+  success: boolean;
+  message: string;
+  unapproved: { email: string; name: string; mobile: string }[];
+}
+
+export interface GenericResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface ApproveHospitalAdminsResponse {
+  success: boolean;
+  message: string;
+  unapproved: { email: string; name: string; hospital: HospitalData }[];
+}
+
+export interface ApproveSuperAdminsResponse {
+  success: boolean;
+  message: string;
+  unapproved: { email: string }[];
 }

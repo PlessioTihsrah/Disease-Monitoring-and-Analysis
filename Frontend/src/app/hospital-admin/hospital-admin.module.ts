@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { HospitalAdminRoutingModule } from './hospital-admin-routing.module';
 import { MainComponent } from './main/main.component';
+import { CloseAppointmentComponent } from './close-appointment/close-appointment.component';
+import { ApproveDoctorComponent } from './approve-doctor/approve-doctor.component';
+import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [MainComponent],
-  imports: [CommonModule, HospitalAdminRoutingModule],
+  declarations: [
+    MainComponent,
+    CloseAppointmentComponent,
+    ApproveDoctorComponent,
+  ],
+  imports: [CommonModule, RouterModule, SharedModule],
   exports: [MainComponent],
 })
 export class HospitalAdminModule {}
