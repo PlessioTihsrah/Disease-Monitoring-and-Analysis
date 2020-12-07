@@ -10,6 +10,12 @@ import { SuperAdminSignupComponent } from './super-admin-signup/super-admin-sign
 import { SuperAdminLoginComponent } from './super-admin-login/super-admin-login.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { MainPageCardComponent } from './main-page-card/main-page-card.component';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -22,8 +28,17 @@ import { FormsModule } from '@angular/forms';
     SuperAdminSignupComponent,
     SuperAdminLoginComponent,
     MainComponent,
+    MainPageCardComponent,
   ],
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    DropdownModule,
+  ],
   exports: [MainComponent],
 })
 export class AuthenticationModule {}

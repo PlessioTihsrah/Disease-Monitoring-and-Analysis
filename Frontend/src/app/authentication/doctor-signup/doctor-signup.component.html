@@ -1,93 +1,88 @@
-<div class="content">
-  <h2 class="content-title text-center">Signup</h2>
-  <div class="d-flex justify-content-center">
-    <form class="form-inline w-400 mw-full" (submit)="onSubmit($event)">
-      <div class="form-group">
-        <label class="required w-100" for="email">Email</label>
-
+<div>
+  <form (submit)="onSubmit($event)">
+    <div class="p-fluid">
+      <div class="p-float-label p-mt-2">
         <input
           type="email"
-          class="form-control"
-          placeholder="email"
           id="email"
-          required
           name="email"
           [(ngModel)]="email"
+          pInputText
+          required
         />
+        <label for="email">Email</label>
       </div>
-      <div class="form-group">
-        <label class="required w-100" for="password">Password</label>
-
+      <div class="p-float-label p-mt-4">
         <input
           type="password"
-          class="form-control"
-          placeholder="Password"
           id="password"
-          required
           name="password"
           [(ngModel)]="password"
+          pInputText
+          required
         />
+        <label for="password">Password</label>
       </div>
-      <div class="form-group">
-        <label class="required w-100" for="Hospital">Hospital</label>
-
+      <div class="p-mt-3">
+        <div class="p-inputgroup">
+          <input
+            type="text"
+            class="form-control"
+            name="hospitalToSearch"
+            id="Hospital"
+            placeholder="Hospital"
+            [(ngModel)]="hospitalToSearch"
+            pInputText
+          />
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Search"
+            (click)="searchHospital(hospitalToSearch)"
+          ></button>
+        </div>
+      </div>
+      <div *ngIf="hospitals.length" class="p-mt-2">
+        <p-dropdown
+          [options]="hospitals"
+          [(ngModel)]="hospital"
+          optionLabel="name"
+          optionValue="id"
+          name="hospital"
+        ></p-dropdown>
+      </div>
+      <div class="p-float-label p-my-5">
         <input
           type="text"
-          class="form-control"
-          name="hospitalToSearch"
-          id="Hospital"
-          [(ngModel)]="hospitalToSearch"
-        />
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="searchHospital(hospitalToSearch)"
-        >
-          Search
-        </button>
-      </div>
-      <div class="form-group" *ngIf="hospitals.length">
-        <select class="form-control" [(ngModel)]="hospital" name="hospital">
-          <option *ngFor="let hospital of hospitals" [value]="hospital.id">
-            {{ hospital.name }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required w-100" for="name">Name</label>
-
-        <input
-          type="text"
-          class="form-control"
+          pInputText
           name="name"
           id="name"
           required
           [(ngModel)]="name"
         />
+        <label for="name">Name</label>
       </div>
-      <div class="form-group">
-        <label class="required w-100" for="tel">Mobile no</label>
 
+      <div class="p-float-label">
         <input
           type="number"
-          class="form-control"
+          pInputText
           name="mobile"
           id="tel"
           required
           [(ngModel)]="mobileNo"
         />
+        <label for="tel">Mobile no</label>
       </div>
-      <div class="form-group mb-0">
-        <button
-          type="submit"
-          class="btn btn-primary ml-auto"
-          [disabled]="
-            !email || !password || !name || !hospital || mobileNo <= 0
-          "
-        >
-          Sign up
-        </button>
-      </div>
-    </form>
-  </div>
+    </div>
+    <div class="p-mt-2">
+      <button
+        type="submit"
+        pButton
+        label="Sign Up"
+        [disabled]="!email || !password || !name || !hospital || mobileNo <= 0"
+      ></button>
+    </div>
+  </form>
 </div>
