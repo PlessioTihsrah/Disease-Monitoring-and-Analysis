@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-authentication',
@@ -9,6 +9,7 @@ export class MainComponent implements OnInit {
   type = 0;
   signup = false;
   display = false;
+  @ViewChild('overlay') overlay: ElementRef;
   constructor() {}
 
   getWidth(): number {
@@ -27,5 +28,13 @@ export class MainComponent implements OnInit {
     }
     return title + 'Super Admin';
   }
+  toggleOverlay() {
+    if (this.display) {
+      this.overlay.nativeElement.style.display = 'block';
+    } else {
+      this.overlay.nativeElement.style.display = 'none';
+    }
+  }
+
   ngOnInit(): void {}
 }
