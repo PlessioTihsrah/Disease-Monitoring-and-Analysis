@@ -6,15 +6,16 @@ declare var halfmoon;
 })
 export class UxService {
   dark = JSON.parse(localStorage.getItem('dark')) || false;
+  linkTag: HTMLLinkElement = document.getElementById(
+    'css-main'
+  ) as HTMLLinkElement;
   showToast(title: string, content: string): void {
-    halfmoon.initStickyAlert({
-      content,
-      title,
-    });
+    alert(content);
   }
   constructor(private spinner: NgxSpinnerService) {
     if (this.dark) {
-      halfmoon.toggleDarkMode();
+      this.linkTag.href = '/assets/css/dark.css';
+      document.body.classList.add('dark');
     }
   }
   startSpinner(): void {
@@ -24,8 +25,14 @@ export class UxService {
     this.spinner.hide();
   }
   toggleDarkMode(): void {
-    halfmoon.toggleDarkMode();
     this.dark = !this.dark;
+    if (this.dark) {
+      this.linkTag.href = '/assets/css/dark.css';
+      document.body.classList.add('dark');
+    } else {
+      this.linkTag.href = '/assets/css/light.css';
+      document.body.classList.remove('dark');
+    }
     localStorage.setItem('dark', JSON.stringify(this.dark));
   }
   errHandler = (err): void => {

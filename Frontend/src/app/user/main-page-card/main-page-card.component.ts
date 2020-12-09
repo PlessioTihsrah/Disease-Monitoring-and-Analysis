@@ -7,9 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MainPageCardComponent implements OnInit {
   @Input() title = '';
-  @Input() description = '';
-  @Input() url = '';
-  @Input() img = '';
+  @Input() icon = 'pi-map-marker';
+  @Input() active = false;
   constructor() {}
 
   ngOnInit(): void {}

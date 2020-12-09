@@ -44,5 +44,18 @@ export class AppointmentCardComponent implements OnInit {
     });
     return unpaid;
   }
+  getWidth() {
+    return window.innerWidth * 0.95;
+  }
+  getDummy() {
+    return [
+      ...this.appointment.visits,
+      ...this.appointment.visits,
+      ...this.appointment.visits,
+      ...this.appointment.visits,
+      ...this.appointment.visits,
+      ...this.appointment.visits,
+    ];
+  }
   ngOnInit(): void {}
 }

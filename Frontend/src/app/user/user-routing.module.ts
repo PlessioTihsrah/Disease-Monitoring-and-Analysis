@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainPageCardComponent } from './main-page-card/main-page-card.component';
 import { HospitalListComponent } from './hospital-list/hospital-list.component';
 import { DiseasePredictionComponent } from './disease-prediction/disease-prediction.component';
 import { AppointmentComponent } from './appointment/appointment.component';

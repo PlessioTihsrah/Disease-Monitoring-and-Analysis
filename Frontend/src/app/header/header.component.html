@@ -1,14 +1,18 @@
-<nav class="navbar justify-content-between">
-  <!-- justify-content-between = justify-content: space-between -->
+<p-menubar [model]="items">
+  <button
+    pButton
+    pRipple
+    type="button"
+    [icon]="ux.dark ? 'pi pi-moon' : 'pi pi-sun'"
+    class="p-button-rounded p-button-link"
+    (click)="ux.toggleDarkMode()"
+  ></button>
 
-  <a routerLink="/" class="navbar-brand"> Home </a>
-  <!-- Navbar content with sign up button -->
-  <div class="navbar-content">
-    <button class="btn-action btn mr-10" (click)="ux.toggleDarkMode()">
-      <fa-icon [icon]="getIcon()"></fa-icon>
-    </button>
-    <button class="btn btn-primary" type="button" (click)="logout()">
-      Logout
-    </button>
-  </div>
-</nav>
+  <button
+    pButton
+    label="Logout"
+    icon="pi pi-power-off"
+    class="p-button-link"
+    (click)="logout()"
+  ></button>
+</p-menubar>

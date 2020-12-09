@@ -28,19 +28,21 @@ export class AppointmentComponent implements OnInit {
     });
   }
 
-  getData() {
+  getData(page = 1) {
     this.ux.startSpinner();
-    this.userActionService.getAppointment(this.closed).subscribe((res) => {
-      this.ux.stopSpinner();
-      if (res.success) {
-        this.appointments = res.appointments;
-        this.page = res.page;
-        this.totalPages = res.totalPages;
-        this.totalAppointments = res.totalAppointments;
-      } else {
-        this.ux.showToast('Error', res.message);
-      }
-    }, this.ux.errHandler);
+    this.userActionService
+      .getAppointment(this.closed, page)
+      .subscribe((res) => {
+        this.ux.stopSpinner();
+        if (res.success) {
+          this.appointments = res.appointments;
+          this.page = res.page;
+          this.totalPages = res.totalPages;
+          this.totalAppointments = res.totalAppointments;
+        } else {
+          this.ux.showToast('Error', res.message);
+        }
+      }, this.ux.errHandler);
   }
   ngOnInit(): void {}
 }

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { AppointmentResponse, HospitalSearchResponse } from '../types';
 import { Observable } from 'rxjs';
-import { UxService } from '../ux.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +26,7 @@ export class UserActionService {
       }
     );
   }
-  getAppointment(closed): Observable<AppointmentResponse> {
+  getAppointment(closed, page = 1): Observable<AppointmentResponse> {
     if (closed) {
       return this.http.get<AppointmentResponse>(
         this.baseURL + '/appointments',
@@ -35,7 +34,7 @@ export class UserActionService {
           headers: {
             Authorization: 'Bearer ' + this.authService.token,
           },
-          params: { closed: 'true' },
+          params: { closed: 'true', page: page.toString() },
         }
       );
     } else {
@@ -56,7 +55,7 @@ export class UserActionService {
     disease: string,
     page = 1,
     maxResults = 10
-  ) {
+  ): Observable<HospitalSearchResponse> {
     const params: any = {
       state,
       district,

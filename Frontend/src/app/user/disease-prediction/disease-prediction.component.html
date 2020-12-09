@@ -1,24 +1,33 @@
-<!--<label for="symptoms" class="font-weight-bold"-->
-<!--  >Select one or more Symptons (Use Ctrl Key)</label-->
-<!--&gt;-->
-
-<ng-multiselect-dropdown
-  placeholder="Choose Symptoms"
-  [data]="symptoms"
-  [(ngModel)]="abc"
-  [settings]="dropdownSettings"
->
-</ng-multiselect-dropdown>
-
-<button
-  class="btn btn-danger btn-block mt-20"
-  *ngIf="abc.length"
-  (click)="predict()"
->
-  Predict
-</button>
-
-<div class="text-center" *ngIf="prediction">
-  <h2>Predicted disease is {{ prediction }}</h2>
-  <a routerLink="/hospitals" class="btn btn-link">Find Hospital</a>
+<div class="p-mt-3">
+  <p-pickList
+    [source]="symptoms"
+    [target]="userSymptoms"
+    sourceHeader="All Symptoms"
+    targetHeader="Your Symptoms"
+    [dragdrop]="true"
+    [responsive]="true"
+    [showSourceControls]="false"
+    [showTargetControls]="false"
+  >
+    <ng-template let-symptom pTemplate="item">
+      <div>
+        <div class="p-text-right">
+          {{ symptom.item_text }}
+        </div>
+      </div>
+    </ng-template>
+  </p-pickList>
+  <div class="p-d-flex p-jc-center p-mt-3">
+    <button
+      class="btn btn-danger btn-block mt-20"
+      pButton
+      *ngIf="userSymptoms.length"
+      (click)="predict()"
+      label="Predict"
+    ></button>
+  </div>
+  <div class="p-text-center" *ngIf="prediction">
+    <h2>Predicted disease is {{ prediction }}</h2>
+    <a routerLink="/hospitals" class="p-button">Find Hospital</a>
+  </div>
 </div>

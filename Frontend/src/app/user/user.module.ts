@@ -10,6 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { DialogModule } from 'primeng/dialog';
+import { PickListModule } from 'primeng/picklist';
 
 @NgModule({
   declarations: [
@@ -25,6 +31,12 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     SharedModule,
     RouterModule,
     NgMultiSelectDropDownModule,
+    ButtonModule,
+    DropdownModule,
+    InputTextModule,
+    CardModule,
+    DialogModule,
+    PickListModule,
   ],
   exports: [],
 })

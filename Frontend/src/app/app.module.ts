@@ -14,6 +14,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouteHandlerModule } from './route-handler/route-handler.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -31,6 +33,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HospitalAdminModule,
     NgxSpinnerModule,
     FontAwesomeModule,
+    MenubarModule,
+    ButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
