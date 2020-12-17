@@ -4,7 +4,7 @@ from mongoengine import ValidationError, DoesNotExist
 from flask_jwt_simple import create_jwt
 import datetime
 from helpers.helpers import generate_hash, check_hash
-
+from helpers.validation import valid_email, valid_password
 
 class Login(Resource):
     def post(self):
@@ -18,9 +18,21 @@ class Login(Resource):
                     "success": False,
                     "message": "Email or password is missing"
                 }
+
+            elif not valid_email(q.email):
+                return {
+                    "success": False,
+                    "message": "Invalid email"
+                }
+            elif not valid_password(q.password):
+                return {
+                    "success": False,
+                    "message": "Password should be of length atleast 6 letters"
+                }
             else:
                 try:
-                    user = User.objects.get(email=q.email)
+                    email = q.email.lower()
+                    user = User.objects.get(email=email)
                     valid = check_hash(q.password, user.password)
                     if valid:
                         return {

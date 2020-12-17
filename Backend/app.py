@@ -11,7 +11,7 @@ from helpers.helpers import initialise_helpers
 from database.db import initialize_db
 from os import getenv
 from datetime import timedelta
-app = Flask(__name__)
+app = Flask(__name__, static_folder="assets")
 
 
 @app.after_request
